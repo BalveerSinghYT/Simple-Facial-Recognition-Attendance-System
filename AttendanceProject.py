@@ -5,10 +5,10 @@ import os
 from datetime import datetime
 # --*------ AutoMate using List ------------------
 """
-Automatic find the images in folder & convert to RGB from BGR, 
+Automatic find the images in folder & convert BGR to RGB, 
 & encode it using the list.
 """
-path = 'ImagesAttendance'       # Folder Name
+path = 'ImageBase'              # Folder Name
 images = []                     #List with array of images
 classNames = []                 #List with only images name text by spliting .jpg
 
@@ -41,10 +41,15 @@ def findEncodings(images):
 def markAttendance(name):
     with open('attendance.csv', 'r+') as f:         # r+ mean read & write
         myDataList = f.readlines()
-        #print(myDataList)
+        nameList = []
         for line in myDataList:
             entry = line.split(',')
-#markAttendance('a')
+            nameList.append(entry[0])
+        if name not in nameList:
+            now = datetime.now()
+            dtstring = now.strftime('%H:%M:%S')
+            f.writelines(f'\n{name}, {dtstring}')
+
 
 #---------------------------------------------------------------------------------
 encodeListKnown = findEncodings(images)
@@ -53,7 +58,7 @@ print("Encoding Complete")
 
 #--***--------------- Taking test image using WebCam -----------------------------
 
-cap = cv2.VideoCapture("http://25.127.112.222:8080/video")
+cap = cv2.VideoCapture("http://25.209.95.192:8080/video")
 
 while True:
     success, img = cap.read()
@@ -66,7 +71,7 @@ while True:
     """
     facesCurFrame = face_recognition.face_locations(imgS)           # This store coordinates of face location in list
     encodesCurFrame = face_recognition.face_encodings(imgS, facesCurFrame)
-    print(facesCurFrame)
+    #print(facesCurFrame)
     """Now we are going to iterate through all faces that we found in current frame
     & compare all these faces with the encoding that we found before"""
 
@@ -95,9 +100,11 @@ while True:
                 Now the face recognition is done. Next step is to display the image window with rectangle on 
                 face location & name of the person.
             """
-            cv2.rectangle(img,(x1, y1), (x2, y1), (0, 255, 0), 2)
+            cv2.rectangle(img,(x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.rectangle(img, (x1, y2-35), (y2, y2),(0, 255, 0), cv2.FILLED)
             cv2.putText(img, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-
+            markAttendance(name)
+            print(name, "is present")
+            break
     cv2.imshow("Webcam", img)
     cv2.waitKey(1)
