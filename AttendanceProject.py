@@ -58,7 +58,7 @@ print("Encoding Complete")
 
 #--***--------------- Taking test image using WebCam -----------------------------
 
-cap = cv2.VideoCapture("http://25.209.95.192:8080/video")
+cap = cv2.VideoCapture("http://25.76.62.158:8080/video")
 
 while True:
     success, img = cap.read()
@@ -86,7 +86,6 @@ while True:
                         &
             also we can change tolerance
         """
-
         # now we are going to use numpy to pick the minimum index value as match index
         matchIndex = np.argmin(faceDis)   # this gives the index no where the tolerance is minimum
         #print(matchIndex)
