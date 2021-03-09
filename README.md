@@ -6,3 +6,8 @@ I have used mobile camera as a webcam with the help of IP Webcam app. If you als
 
 **Library Installed**
 dlib = https://pypi.org/simple/dlib/
+
+
+### Snapshots:
+
+![Face Recognition](https://user-images.githubusercontent.com/44961536/110426367-fc078600-80cb-11eb-9123-c57cf2be2b8d.png)
